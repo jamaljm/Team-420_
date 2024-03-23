@@ -11,7 +11,7 @@ export default function Dash() {
                   <Statics />
               </div>
         <div className="relative min-h-screen -mt-10 h-full w-full flex m-0 p-0 shadow-md rounded-2xl">
-          {/* <Map /> */}
+          <Map />
         </div>
       </div>
       <div className="flex-1  w-full h min-h-screen "><Table/></div>

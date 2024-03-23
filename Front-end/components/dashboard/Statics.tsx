@@ -24,7 +24,7 @@ const stats = [
     percentage: "+130",
     value: "45",
     status: "up",
-    icon: "/clock-svgrepo-com1.svg",
+    icon: "https://img.icons8.com/windows/26/FFFFFF/checked--v1.png",
   },
 ];
 

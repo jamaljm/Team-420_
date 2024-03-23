@@ -2,10 +2,13 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@nextui-org/button";
-
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isActive = (path: string) => {
+    return path === pathname;
+  };
   return (
     <header>
       <div className="bg-[#2f3b4d] pt-1.5 pb-3">
@@ -14,7 +17,9 @@ export default function Navbar() {
             <div className="hidden  lg:flex font-body4 lg:items-center gap-7">
               <Link
                 href="#"
-                className="text-sm flex gap-2 text-white px-4 font-medium bg-red-500 rounded-full py-1.5 "
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white px-4 font-medium  rounded-full py-1.5 ${
+                  isActive("/dashboard") ? "bg-red-500" : ""
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +41,9 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
+                className={`text-sm flex gap-2 hover:bg-red-500 border border-red-300 text-white px-4 font-medium  rounded-full py-1.5 ${
+                  isActive("/police") ? "bg-red-500" : ""
+                }`}
               >
                 <img
                   width="20"
@@ -49,7 +56,9 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
+                  isActive("/ambulance") ? "bg-red-500" : ""
+                }`}
               >
                 <img
                   width="20"
@@ -62,7 +71,9 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
+                  isActive("/fireforce") ? "bg-red-500" : ""
+                }`}
               >
                 <img
                   width="20"
@@ -75,7 +86,9 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
+                  isActive("/shepolice") ? "bg-red-500" : ""
+                }`}
               >
                 <img
                   width="20"

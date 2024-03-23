@@ -6,6 +6,9 @@ import Map from "./Map";
 
 import { useState } from "react";
 import Link from "next/link";
+import { supabase } from "@/config/supabase/client";
+import { Button } from "@nextui-org/react";
+// import MapN from "./Small_map";
 type StatusesKeys = "open" | string;
 
 interface MarkerData {
@@ -21,23 +24,41 @@ export interface Geocode {
 }
 
 export type CallData = {
-  order_price: any;
-  coordinates: { lat: any; lng: any };
-  items: any;
-  key: string;
-  unique_id: string;
-  order_tittle: string;
-  streamSid: string;
-  name: string;
-  order_quantity: any;
-  location?: string;
-  geocode?: Geocode;
-  phone_no: string;
-  live: boolean;
-  status: StatusesKeys;
-  transcript?: string;
-  dateCreated: string;
-  dateDisconnected?: string;
+  id: number;
+  created_at: string;
+  user_name: string;
+  user_phone: number;
+  user_lat: number;
+  user_lon: number;
+  driver_name: string;
+  driver_phone: number;
+  driver_location: {
+    [key: string]: string;
+  };
+  driver_flag: boolean;
+  p_vechicle_number: string;
+  police_phone: number | null;
+  police_location: {
+    [key: string]: string;
+  };
+  fire_vechicle_number: string | null;
+  fire_phone: number | null;
+  fire_location: {
+    [key: string]: string;
+  };
+  she_vechicle_number: string | null;
+  she_location: {
+    [key: string]: string;
+  };
+  she_phone: number | null;
+  she_flag: boolean;
+  fire_flag: boolean;
+  emergency_desc: {
+    type: string;
+    description: string;
+    no_of_people: number;
+  };
+  police_flag: boolean;
 };
 const containerStyle = {
   height: "400px",
@@ -54,9 +75,19 @@ export default function Dashboard() {
   const [values, setValues] = useState<CallData[]>([]);
   const [selectedOrderIndex, setSelectedOrderIndex] = useState(1);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
-    console.log(values);
-    
-    useEffect 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from("main_table").select("*");
+      if (error) {
+        console.error("Error fetching data:", error);
+        return;
+      }
+      setValues(data);
+    };
+
+    fetchData();
+  }, []);
 
   const filteredCalls: CallData[] = (values || [])
     .filter((call: any) => call.status === ("ordered" as StatusesKeys))
@@ -69,8 +100,6 @@ export default function Dashboard() {
   const filteredCalls3: CallData[] = (values || [])
     .filter((call: any) => call.status === ("delivered" as StatusesKeys))
     .map((call: any) => ({ ...call, key: call.unique_id }));
-
-  console.log(values);
 
   const handleAccept = (unique_id: string) => {};
 
@@ -93,67 +122,60 @@ export default function Dashboard() {
           style={{ flex: 3 }}
         >
           <div className="px-2 pr-4">
-            <div className="py-1 bg-[#121826] sm:py-1 lg:py-2 rounded-xl">
+            <div className="py-1 bg-[#121826] min-h-screen sm:py-1 lg:py-2 rounded-xl">
               <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div className="flex flex-col ">
                   <div className="-mx-4 -my-1 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block w-full py-2 align-middle md:px-6 lg:px-8">
                       <div className="grid grid-cols-8 w-full gap-x-3.5">
-                        <div className="py-3.5 pl-4 pr-3 text-left text-sm whitespace-nowrap font-medium  text-white">
+                        <div className="py-3.5 pl-4 pr-3 col-span-1 text-left text-sm whitespace-nowrap font-medium  text-white">
                           <div className="flex items-center">ID</div>
                         </div>
 
-                        <div className="py-3.5 px-3 text-left col-span-3 text-sm whitespace-nowrap font-medium font-body1 text-white">
-                          <div className="flex items-center">Location</div>
+                        <div className="py-3.5 px-3 text-left col-span-2 text-sm whitespace-nowrap font-medium font-body1 text-white">
+                          <div className="flex items-center">Name</div>
                         </div>
                         <div className="py-3.5 px-3 text-left col-span-2 text-sm whitespace-nowrap font-medium font-body1 text-white">
                           <div className="flex items-center">Mobile No</div>
                         </div>
 
-                        <div className="py-3.5 px-3 text-left text-sm whitespace-nowrap font-medium font-body1 text-white">
-                          <div className="flex items-center">Need</div>
+                        <div className="py-3.5 px-3 col-span-2 text-left text-sm  whitespace-nowrap font-medium font-body1 text-white">
+                          <div className="flex items-center">Emergency</div>
                         </div>
 
                         <div className="py-3.5 pl-3 pr-4 sm:pr-6 md:pr-0">
                           <span className="sr-only">Actions</span>
                         </div>
                       </div>
-                      {filteredCalls.map((call, index) => (
+                      {values.map((call, index) => (
                         <div>
                           <div className="divide-y divide-red-200">
                             <div
                               className="grid grid-cols-8 gap-x-3.5"
-                              key={call.key}
+                              key={index}
                             >
-                              <div className="py-4 pl-4 pr-3 font-body1 text-sm font-medium text-gray-900 whitespace-nowrap">
-                                {index + 1}
+                              <div className="py-4 pl-4 pr-3 font-body1 text-sm font-medium text-white whitespace-nowrap">
+                                {call.id}
                               </div>
 
-                              <div className="px-4 font-body1 py-4 col-span-3 text-sm font-semibold text-gray-900 whitespace-nowrap">
-                                {call.location}
+                              <div className="px-4 font-body1 py-4 col-span-2 text-sm font-medium text-white whitespace-nowrap">
+                                {call.user_name}
                               </div>
-                              <div className="px-4 col-span-2 font-body1 py-4 text-sm font-bold text-gray-900 whitespace-nowrap">
-                                <a href={`tel:${call.phone_no}`}>
+                              <div className="px-4 col-span-2 font-body1 py-4 text-sm font-medium text-white whitespace-nowrap">
+                                <a href={`tel:${call.user_phone}`}>
                                   <img
                                     className="inline-block mr-2 "
-                                    width="30"
-                                    height="30"
+                                    width="25"
+                                    height="25"
                                     src="https://img.icons8.com/color/48/apple-phone.png"
                                     alt="apple-phone"
                                   />
-                                  {call.phone_no}
+                                  {call.user_phone}
                                 </a>
                               </div>
-                              <div className="px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
+                              <div className="px-4 py-4 text-sm col-span-2 font-medium text-white whitespace-nowrap">
                                 <div className="inline-flex font-body1 items-center">
-                                  <svg
-                                    className="mr-1.5 h-2.5 w-2.5 text-red-500"
-                                    fill="currentColor"
-                                    viewBox="0 0 8 8"
-                                  >
-                                    <circle cx="4" cy="4" r="3" />
-                                  </svg>
-                                  {call.status}
+                                  {call.emergency_desc?.type}
                                 </div>
                               </div>
                               <div className="px-4 py-4 text-sm font-medium text-right text-white whitespace-nowrap">
@@ -182,12 +204,19 @@ export default function Dashboard() {
                             </div>
                           </div>
                           {showOrderDetails && selectedOrderIndex === index && (
-                            <div className="py-1 mb-5 bg-white grid  grid-cols-6">
-                              <div className="py-12 col-span-4 bg-white sm:py-16 lg:py-2">
+                            <div className="py-1 mb-5 bg-[#121826] grid  grid-cols-6">
+                              <div className="py-12 col-span-6 bg-[#121826] sm:py-16 lg:py-2">
                                 <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-3">
                                   <div>
                                     <p className="text-md font-medium text-white">
-                                      Latest Transactions
+                                      Emergency
+                                    </p>
+                                    <p className="text-xs bg-[#232d479e] px-3 my-2 rounded-xl text-white font-body1 py-3">
+                                      {call.emergency_desc.description}
+                                    </p>
+                                    <p className="text-xs bg-red-200  px-4 py-1 rounded-2xl w-fit font-body4  font-normal text-black">
+                                      No of People involved:{" "}
+                                      {call.emergency_desc.no_of_people}
                                     </p>
                                   </div>
 
@@ -197,87 +226,140 @@ export default function Dashboard() {
                                         <tr>
                                           <td
                                             width="50%"
-                                            className="px-6 py-4 text-sm font-medium text-red-400 whitespace-normal"
+                                            className="px-6 py-3 text-xs font-body1  font-medium text-red-400 whitespace-normal"
                                           >
-                                            item
+                                            Emergency needed
                                           </td>
                                           <td
                                             width="50%"
-                                            className="px-6 py-4 text-sm font-medium text-red-400 whitespace-normal"
+                                            className="px-6 py-3 text-xs font-body1  font-medium text-red-400 whitespace-normal"
                                           >
-                                            price
+                                            Status{" "}
+                                          </td>
+                                          <td
+                                            width="50%"
+                                            className="px-6 py-3 text-xs font-body1  font-medium text-red-400 whitespace-normal"
+                                          >
+                                            Name/No
                                           </td>
 
-                                          <td className="px-6 py-4 text-sm font-medium text-red-400 whitespace-normal">
-                                            Quantity
+                                          <td className="px-6 py-3 text-xs font-body1  font-medium text-red-400 whitespace-normal">
+                                            Contact
                                           </td>
                                         </tr>
                                       </thead>
 
                                       <tbody className="divide-y divide-red-200">
+                                        {call.police_flag && (
+                                          <tr>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              Police
+                                            </td>
+                                            <td
+                                              className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
+                                                call.p_vechicle_number
+                                                  ? "bg-green-200"
+                                                  : "bg-red-200"
+                                              }`}
+                                            >
+                                              {call.p_vechicle_number
+                                                ? "Assigned"
+                                                : "Not Assigned"}
+                                            </td>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.p_vechicle_number}
+                                            </td>{" "}
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.p_vechicle_number}
+                                            </td>
+                                          </tr>
+                                        )}
+                                        {call.fire_flag && (
+                                          <tr>
+                                            <td className="px-6 py-3 font-body1 text-xs  font-normal text-white whitespace-nowrap">
+                                              Fire Force
+                                            </td>
+                                            <td
+                                              className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
+                                                call.fire_vechicle_number
+                                                  ? "bg-green-200"
+                                                  : "bg-red-200"
+                                              }`}
+                                            >
+                                              {call.fire_vechicle_number
+                                                ? "Assigned"
+                                                : "Not Assigned"}
+                                            </td>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.fire_vechicle_number}
+                                            </td>{" "}
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.fire_phone}
+                                            </td>
+                                          </tr>
+                                        )}
+                                        {call.she_flag && (
+                                          <tr>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              She-Police
+                                            </td>
+                                            <td
+                                              className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
+                                                call.she_vechicle_number
+                                                  ? "bg-green-200"
+                                                  : "bg-red-200"
+                                              }`}
+                                            >
+                                              {call.she_vechicle_number
+                                                ? "Assigned"
+                                                : "Not Assigned"}
+                                            </td>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.she_vechicle_number}
+                                            </td>{" "}
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.she_phone}
+                                            </td>
+                                          </tr>
+                                        )}
                                         <tr>
-                                          <td className="px-6 py-4 font-body1 text-sm font-normal text-white whitespace-nowrap">
-                                            {call.order_tittle}
+                                          <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
+                                            Ambulance
                                           </td>
-                                          <td className="px-6 font-body1 py-4 text-sm font-normal text-white whitespace-nowrap">
-                                            ₹ {call.order_price}
+                                          <td
+                                            className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
+                                              call.driver_name
+                                                ? "bg-green-200"
+                                                : "bg-red-200"
+                                            }`}
+                                          >
+                                            {call.driver_name
+                                              ? "Assigned"
+                                              : "Not Assigned"}
                                           </td>
-                                          <td className="px-6 py-4 font-body1 text-sm font-normal text-white whitespace-nowrap">
-                                            {call.order_quantity}
+                                          <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
+                                            {call.driver_name}
                                           </td>
-                                        </tr>
-                                        <tr>
-                                          <td className="px-6 font-body1 py-4 text-sm font-bold text-white whitespace-nowrap">
-                                            Total price{" "}
-                                          </td>
-
-                                          <td className="hidden px-6 py-4 text-sm font-body1 font-bold text-white lg:table-cell whitespace-nowrap">
-                                            ₹ {call.order_price}
+                                          <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                            {call.driver_phone}89988989
                                           </td>
                                         </tr>
                                       </tbody>
                                     </table>
                                   </div>
-                                </div>
-                              </div>
-                              <div className="py-12 col-span-1 bg-white sm:py-16 lg:py-2">
-                                <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-3">
-                                  <div>
-                                    <p className="text-md font-medium text-white">
-                                      Action{" "}
-                                    </p>
-                                  </div>
-
-                                  <div className="mt-6  rounded-2xl">
-                                    <button
-                                      onClick={() =>
-                                        handleAccept(call.unique_id)
-                                      }
-                                      className="bg-green-400 text-white px-9 py-2 rounded-2xl "
-                                    >
-                                      Accept
-                                    </button>
-                                    <button
-                                      onClick={() =>
-                                        handleCancel(call.unique_id)
-                                      }
-                                      className="bg-red-400 mt-2 text-white px-9 py-2 rounded-2xl "
-                                    >
-                                      Cancel
-                                    </button>
-                                  </div>
-                                </div>
+                                </div>{" "}
+                                <Button className="bg-green-200 mt-2 mx-4 py-1 w-full text-green-950  font-body4 font-semibold">
+                                  Resolved
+                                </Button>
                               </div>
                             </div>
                           )}
                           {showOrderDetails && selectedOrderIndex === index && (
+                            <></>
                             //  map
-                            <div className=" mb-8 relative w-full rounded-3xl h-80">
-                              {/* <Map
-                                lat={call.coordinates.lat}
-                                lng={call.coordinates.lng}
-                              /> */}
-                            </div>
+                            // <div className=" mb-8 relative w-full rounded-3xl h-80">
+                            //   <MapN lat={call.user_lat} lng={call.user_lon} />
+                            // </div>
                           )}
                         </div>
                       ))}
