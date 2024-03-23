@@ -95,7 +95,7 @@ export default function Component() {
           href="#"
         >
           <FlagIcon className="h-6 w-6 md:h-8 md:w-8" />
-          Ambulance
+          Police
         </Link>
         <div className="ml-auto md:hidden">
           <Button size="sm" variant="ghost">

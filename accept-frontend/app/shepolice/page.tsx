@@ -79,7 +79,7 @@ export default function Component() {
       }
 
       const response = await axios.post(base_url, {
-        message: "She police is on the way",
+        message: "She-police is on the way",
       });
       console.log("Data updated successfully:", data);
     } catch (error) {
