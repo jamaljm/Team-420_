@@ -18,7 +18,7 @@ export default function Home() {
           Ambulance
         </Link>
         <Link
-          href="/firefighter"
+          href="/fireforce"
           className="block bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded text-center"
         >
           Fire Fighter
