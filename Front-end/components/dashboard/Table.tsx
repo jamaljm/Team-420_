@@ -103,9 +103,17 @@ export default function Dashboard() {
     .filter((call: any) => call.status === ("accepted" as StatusesKeys))
     .map((call: any) => ({ ...call, key: call.unique_id }));
 
-
-
-  const handleAccept = (unique_id: string) => {};
+  const handleAccept = (unique_id: string) => {
+    const updatedCalls = values.map(async (call) => {
+      if (call.id.toString() === unique_id) {
+        const { data, error } = await supabase
+          .from("main_table")
+          .update({ common_status: true })
+          .eq("id", unique_id);
+      }
+    });
+    return "true";
+  };
 
   const handleCancel = (unique_id: string) => {};
 
@@ -354,7 +362,12 @@ export default function Dashboard() {
                                     </table>
                                   </div>
                                 </div>{" "}
-                                <Button className="bg-green-200 mt-4 mx-4 py-0.5 w-[96%] text-green-950  font-body4 font-semibold">
+                                <Button
+                                  onClick={() =>
+                                    handleAccept(call.id.toString())
+                                  }
+                                  className="bg-green-200 mt-4 mx-4 py-0.5 w-[96%] text-green-950  font-body4 font-semibold"
+                                >
                                   Resolved
                                 </Button>
                               </div>

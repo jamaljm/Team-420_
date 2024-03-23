@@ -1,32 +1,11 @@
+"use client";
 import CoinIcon from "../../public/admin/coin.svg";
 import OrderIcon from "../../public/admin/order.svg";
 import CustomerIcon from "../../public/admin/customer.svg";
 import ArrowUpIcon from "../../public/admin/arrow-up.svg";
 import ArrowDownIcon from "../../public/admin/arrow-down.svg";
-
-const stats = [
-  {
-    title: "New",
-    percentage: "+234",
-    value: "12",
-    status: "up",
-    icon: "https://img.icons8.com/material-rounded/24/FFFFFF/plus-math--v1.png",
-  },
-  {
-    title: "Pending",
-    percentage: "-34",
-    value: "23",
-    status: "down",
-    icon: "/clock-svgrepo-com2.svg",
-  },
-  {
-    title: "Completed",
-    percentage: "+130",
-    value: "45",
-    status: "up",
-    icon: "https://img.icons8.com/windows/26/FFFFFF/checked--v1.png",
-  },
-];
+import { supabase } from "../../config/supabase/client";
+import { use, useEffect, useState } from "react";
 
 function StatsCard({ stat }: { stat: any }) {
   const statusClass =
@@ -85,6 +64,55 @@ function StatsCard({ stat }: { stat: any }) {
 }
 
 export default function StatsCardList() {
+  const [total, setTotal] = useState(0);
+  const [completed, setCompleted] = useState(0);
+
+  useEffect(() => {
+    async function fetchStats() {
+      const { data, error } = await supabase
+        .from("main_table")
+        .select("*")
+        .order("id", { ascending: true });
+      console.log(data);
+
+      if (data) {
+        console.log(data);
+        const commonTrueData = data.filter(
+          (item) => item.common_status === true
+        );
+        const commonTrueDatafalse = data.filter(
+          (item) => item.common_status === false
+        );
+        setTotal(commonTrueDatafalse.length);
+
+        setCompleted(commonTrueData.length);
+      }
+    }
+    fetchStats();
+  }, []);
+  const stats = [
+    {
+      title: "New",
+      percentage: "+234",
+      value: total,
+      status: "up",
+      icon: "https://img.icons8.com/material-rounded/24/FFFFFF/plus-math--v1.png",
+    },
+    {
+      title: "Pending",
+      percentage: "-34",
+      value: total,
+      status: "down",
+      icon: "/clock-svgrepo-com2.svg",
+    },
+    {
+      title: "Completed",
+      percentage: "+130",
+      value: completed,
+      status: "up",
+      icon: "https://img.icons8.com/windows/26/FFFFFF/checked--v1.png",
+    },
+  ];
   return (
     <div className="flex gap-6">
       {stats.map((stat, index) => (

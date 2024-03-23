@@ -18,37 +18,37 @@ function PopupComponent({ data }) {
     </div>
   );
 }
-const ambulanceData = [
+const fireForceData = [
   {
-    name: "Thiruvananthapuram Ambulance Station A",
+    name: "Thiruvananthapuram Fire Station A",
     phoneNumber: "1234567890",
     latitude: 8.5074,
     longitude: 76.9587, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Thiruvananthapuram Ambulance Station B",
+    name: "Thiruvananthapuram Fire Station B",
     phoneNumber: "2345678901",
     latitude: 8.4786,
     longitude: 76.9524, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Thiruvananthapuram Ambulance Station C",
+    name: "Thiruvananthapuram Fire Station C",
     phoneNumber: "3456789012",
     latitude: 8.4914,
     longitude: 76.9487, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Thiruvananthapuram Ambulance Station D",
+    name: "Thiruvananthapuram Fire Station D",
     phoneNumber: "4567890123",
     latitude: 8.5152,
     longitude: 76.9759, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Thiruvananthapuram Ambulance Station E",
+    name: "Thiruvananthapuram Fire Station E",
     phoneNumber: "5678901234",
     latitude: 8.4865,
     longitude: 76.9543, // Approximate coordinates within 20 km radius of Thiruvananthapuram
-  }
+  },
 ];
 
 
@@ -150,9 +150,9 @@ function Map() {
       );
 
       let el = document.createElement("div");
-      const markers = ambulanceData.map((obj) => {
+      const markers = fireForceData.map((obj) => {
         el = document.createElement("div");
-        el.className = "marker2";
+        el.className = "marker3";
         console.log(obj);
         if (typeof obj.latitude === "number") {
           console.log(typeof obj.latitude, obj.longitude);

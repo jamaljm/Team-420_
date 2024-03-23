@@ -2,24 +2,24 @@ import React from "react";
 import Map from "./Map";
 
 export default function Dash() {
-  const ambulanceData = [
+  const fireForceData = [
     {
-      name: "Ambulance Station 1",
+      name: "Fire Station 1",
       location: "Location 1",
       contact: "1234567890",
     },
     {
-      name: "Ambulance Station 2",
+      name: "Fire Station 2",
       location: "Location 2",
       contact: "9876543210",
     },
     {
-      name: "Ambulance Station 3",
+      name: "Fire Station 3",
       location: "Location 3",
       contact: "5678901234",
     },
     {
-      name: "Ambulance Station 4",
+      name: "Fire Station 4",
       location: "Location 4",
       contact: "5672901234",
     },
@@ -36,7 +36,7 @@ export default function Dash() {
       <div className="w-[30%] h min-h-screen">
         <div className="grid px-4 grid-cols-2 text-center xl:text-left mt-3 gap-y-8 gap-x-6 sm:grid-cols-1 xl:grid-cols-1">
           {/* Rendering PoliceCard for each data */}
-          {ambulanceData.map((police, index) => (
+          {fireForceData.map((police, index) => (
             <PoliceCard
               key={index}
               name={police.name}
@@ -61,7 +61,7 @@ export function PoliceCard({ name, location, contact }: PoliceCardProps) {
     <div className="flex gap-3 bg-[#334056] rounded-2xl">
       <img
         className="object-cover w-auto h-24 mx-auto rounded-lg md:h-36 xl:mx-0"
-        src="https://static.vecteezy.com/system/resources/previews/029/338/731/non_2x/ambulance-car-illustration-emergency-medical-service-vehicle-isolated-on-white-background-vector.jpg"
+        src="https://5.imimg.com/data5/SELLER/Default/2023/2/JB/IT/US/8313669/fire-brigade-truck.jpg"
         alt=""
       />
       <div className="flex flex-col">

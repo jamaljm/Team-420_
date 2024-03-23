@@ -13,10 +13,20 @@ export default function Navbar() {
     <header>
       <div className="bg-[#2f3b4d] pt-1.5 pb-3">
         <div className="px-4 mx-auto sm:px-6 lg:px-16">
-          <nav className="relative flex items-center justify-center h-16 lg:h-16">
+          <nav className="relative flex items-center justify-between h-16 lg:h-16">
+            {" "}
+            <div className="shrink-0">
+              <a
+                href="#"
+                title=""
+                className="flex font-body4 text-white text-3xl font-bold"
+              >
+               🚨 Beacon AI 
+              </a>
+            </div>
             <div className="hidden  lg:flex font-body4 lg:items-center gap-7">
               <Link
-                href="#"
+                href="/dashboard"
                 className={`text-sm flex gap-2 hover:bg-red-500 text-white px-4 border border-red-300 font-medium  rounded-full py-1.5 ${
                   isActive("/dashboard") ? "bg-red-500" : ""
                 }`}
@@ -98,7 +108,8 @@ export default function Navbar() {
                 />
                 ShePolice
               </Link>
-            </div>
+                      </div>
+                      <div></div>
           </nav>
         </div>
       </div>
