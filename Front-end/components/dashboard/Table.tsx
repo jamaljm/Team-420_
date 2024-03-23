@@ -120,7 +120,7 @@ export default function Dashboard() {
   };
   return (
     <>
-      <div className=" flex min-h-screen items-start w-full">
+      <div className=" flex h-full items-start w-full">
         <div
           className="flex w-full -mt-3 items-start flex-col sm:w-64  rounded-3xl"
           style={{ flex: 3 }}

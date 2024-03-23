@@ -18,32 +18,40 @@ function PopupComponent({ data }) {
     </div>
   );
 }
-const policeData = [
+const ambulanceData = [
   {
-    name: "Thiruvananthapuram Police Station A",
+    name: "Thiruvananthapuram Ambulance Station A",
     phoneNumber: "1234567890",
     latitude: 8.5074,
-    longitude: 76.9587, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+    longitude: 76.9587, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Thiruvananthapuram Police Station B",
+    name: "Thiruvananthapuram Ambulance Station B",
     phoneNumber: "2345678901",
     latitude: 8.4786,
-    longitude: 76.9524, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+    longitude: 76.9524, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Kollam Police Station A",
+    name: "Thiruvananthapuram Ambulance Station C",
     phoneNumber: "3456789012",
-    latitude: 8.8839,
-    longitude: 76.6147, // Coordinates of a police station in Kollam district
+    latitude: 8.4914,
+    longitude: 76.9487, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
   {
-    name: "Kollam Police Station B",
+    name: "Thiruvananthapuram Ambulance Station D",
     phoneNumber: "4567890123",
-    latitude: 8.8873,
-    longitude: 76.6006, // Coordinates of a police station in Kollam district
+    latitude: 8.5152,
+    longitude: 76.9759, // Approximate coordinates within 20 km radius of Thiruvananthapuram
   },
+  {
+    name: "Thiruvananthapuram Ambulance Station E",
+    phoneNumber: "5678901234",
+    latitude: 8.4865,
+    longitude: 76.9543, // Approximate coordinates within 20 km radius of Thiruvananthapuram
+  }
 ];
+
+
 
 function Map() {
   const [markerData, setmarkerData] = useState([{}]);
@@ -126,7 +134,7 @@ function Map() {
         attributionControl: false,
         // style:'mapbox://styles/mapbox/dark-v11',
         center: [position.coords.longitude, position.coords.latitude],
-        zoom: 8,
+        zoom: 12,
       });
 
       map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
@@ -142,11 +150,11 @@ function Map() {
       );
 
       let el = document.createElement("div");
-      const markers = policeData.map((obj) => {
+      const markers = ambulanceData.map((obj) => {
         el = document.createElement("div");
-        el.className = "marker1";
+        el.className = "marker2";
         console.log(obj);
-        if (typeof(obj.latitude) === "number") {
+        if (typeof obj.latitude === "number") {
           console.log(typeof obj.latitude, obj.longitude);
 
           return new mapboxgl.Marker(el)

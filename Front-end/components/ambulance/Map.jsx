@@ -18,30 +18,24 @@ function PopupComponent({ data }) {
     </div>
   );
 }
-const policeData = [
+const ambulanceData = [
   {
-    name: "Thiruvananthapuram Police Station A",
+    name: "Thiruvananthapuram Ambulance Station A",
     phoneNumber: "1234567890",
-    latitude: 8.5074,
-    longitude: 76.9587, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+    latitude: 8.5373,
+    longitude: 76.9025, // Approximate coordinates near College of Engineering, Trivandrum (CET)
   },
   {
-    name: "Thiruvananthapuram Police Station B",
+    name: "Thiruvananthapuram Ambulance Station B",
     phoneNumber: "2345678901",
-    latitude: 8.4786,
-    longitude: 76.9524, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+    latitude: 8.47,
+    longitude: 76.935, // Approximate coordinates
   },
   {
-    name: "Kollam Police Station A",
+    name: "Thiruvananthapuram Ambulance Station C",
     phoneNumber: "3456789012",
-    latitude: 8.8839,
-    longitude: 76.6147, // Coordinates of a police station in Kollam district
-  },
-  {
-    name: "Kollam Police Station B",
-    phoneNumber: "4567890123",
-    latitude: 8.8873,
-    longitude: 76.6006, // Coordinates of a police station in Kollam district
+    latitude: 8.43,
+    longitude: 76.965, // Approximate coordinates
   },
 ];
 
@@ -142,11 +136,11 @@ function Map() {
       );
 
       let el = document.createElement("div");
-      const markers = policeData.map((obj) => {
+      const markers = ambulanceData.map((obj) => {
         el = document.createElement("div");
-        el.className = "marker1";
+        el.className = "marker2";
         console.log(obj);
-        if (typeof(obj.latitude) === "number") {
+        if (typeof obj.latitude === "number") {
           console.log(typeof obj.latitude, obj.longitude);
 
           return new mapboxgl.Marker(el)

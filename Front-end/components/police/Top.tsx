@@ -17,7 +17,7 @@ export default function Navbar() {
             <div className="hidden  lg:flex font-body4 lg:items-center gap-7">
               <Link
                 href="#"
-                className={`text-sm flex gap-2 hover:bg-red-500 text-white px-4 font-medium  rounded-full py-1.5 ${
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white px-4 border border-red-300 font-medium  rounded-full py-1.5 ${
                   isActive("/dashboard") ? "bg-red-500" : ""
                 }`}
               >
@@ -39,7 +39,7 @@ export default function Navbar() {
               </Link>
 
               <Link
-                href="#"
+                href="/police"
                 title=""
                 className={`text-sm flex gap-2 hover:bg-red-500 border border-red-300 text-white px-4 font-medium  rounded-full py-1.5 ${
                   isActive("/police") ? "bg-red-500" : ""
@@ -54,7 +54,7 @@ export default function Navbar() {
                 Police
               </Link>
               <Link
-                href="#"
+                href="/ambulance"
                 title=""
                 className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
                   isActive("/ambulance") ? "bg-red-500" : ""
@@ -69,7 +69,7 @@ export default function Navbar() {
                 Ambulance
               </Link>
               <Link
-                href="#"
+                href="/fireforce"
                 title=""
                 className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
                   isActive("/fireforce") ? "bg-red-500" : ""
@@ -84,9 +84,9 @@ export default function Navbar() {
                 Fireforce
               </Link>
               <Link
-                href="#"
+                href="/shepolice"
                 title=""
-                className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300 px-4 font-medium  rounded-full py-1.5 ${
+                className={`text-sm flex gap-2 hover:bg-red-500 text-white border border-red-300   px-4 font-medium  rounded-full py-1.5 ${
                   isActive("/shepolice") ? "bg-red-500" : ""
                 }`}
               >
