@@ -132,7 +132,6 @@ messages: list[dict[str, str]] = [
     
     {"role": "system", "content": "You are a Accident management bot which recieve message about accident.Make sure to extract type of accident , no of people and location of the user .Make sure to keep the conversation short.At the end say THANK YOU and GOODBYE."},
 ]
-# {"role": "system", "content": "the items in the store in the formate of a json object with the item name and the price of the item is :"+dbitem},
 c = 0
 
 
