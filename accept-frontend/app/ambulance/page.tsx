@@ -81,6 +81,8 @@ export default function Component() {
     const response = await axios.post(base_url, {
       message: "Ambulance is on the way",
     });
+          setShowModal(false);
+
     console.log("Data updated successfully:", data);
   };
 

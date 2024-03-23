@@ -21,7 +21,7 @@ export default function Navbar() {
                 title=""
                 className="flex font-body4 text-white text-3xl font-bold"
               >
-               🚨 Beacon AI 
+                🚨 Beacon AI
               </a>
             </div>
             <div className="hidden  lg:flex font-body4 lg:items-center gap-7">
@@ -108,8 +108,8 @@ export default function Navbar() {
                 />
                 ShePolice
               </Link>
-                      </div>
-                      <div></div>
+            </div>
+            <div></div>
           </nav>
         </div>
       </div>

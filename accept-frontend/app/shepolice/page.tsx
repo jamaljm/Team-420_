@@ -81,6 +81,8 @@ export default function Component() {
       const response = await axios.post(base_url, {
         message: "She-police is on the way",
       });
+      setShowModal(false);
+
       console.log("Data updated successfully:", data);
     } catch (error) {
       console.error("Error updating data:");
@@ -135,7 +137,7 @@ export default function Component() {
               </div>
             </CardHeader>
             <CardContent className="flex items-center justify-center p-4 md:p-6">
-              <div className="text-6xl font-semibold">🚑</div>
+              <div className="text-6xl font-semibold">👮🏻‍♀</div>
             </CardContent>
             <CardFooter className="flex gap-2 p-4 md:p-6">
               <Button className="flex-1" variant="outline">

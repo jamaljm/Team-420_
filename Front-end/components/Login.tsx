@@ -77,11 +77,11 @@ Admin Dashboard            </h2>
               </div>
             </form>
             <div className="mt-5 space-y-3">
-              <button
-                type="button"
-                onClick={handleLoging}
-                className="relative inline-flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-red-800 transition-all duration-200 bg-red-50  border border-red-400 rounded-full hover:bg-red-100 focus:bg-red-100 hover:text-white focus:text-white focus:outline-none"
-              >
+              <Link
+                // type="button"
+                href="/dashboard"
+                // onClick={handleLoging}
+                className="relative inline-flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-red-800 transition-all duration-200 bg-red-50  border border-red-400 rounded-full hover:bg-red-100 focus:bg-red-100 hover:text-white focus:text-white focus:outline-none"             >
                 <div className="absolute flex  items-center inset-y-0 left-0 p-4">
                   <svg
                     className="w-6 h-6 text-red"
@@ -93,7 +93,7 @@ Admin Dashboard            </h2>
                   </svg>
                 </div>
                 Login with Google
-              </button>
+              </Link>
             </div>
           </div>
         </div>
