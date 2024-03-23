@@ -1,6 +1,7 @@
 import React from "react";
 import Map from "./Map";
 import Statics from "./Statics";
+import Table from "./Table";
 
 export default function Dash() {
   return (
@@ -13,7 +14,7 @@ export default function Dash() {
           {/* <Map /> */}
         </div>
       </div>
-      <div className="flex-1  w-full h min-h-screen "></div>
+      <div className="flex-1  w-full h min-h-screen "><Table/></div>
     </div>
   );
 }

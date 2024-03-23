@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export default function Navbar() {
   return (
     <header>
-      <div className="bg-[#2f3b4d] pt-1.5 pb-2">
+      <div className="bg-[#2f3b4d] pt-1.5 pb-3">
         <div className="px-4 mx-auto sm:px-6 lg:px-16">
           <nav className="relative flex items-center justify-center h-16 lg:h-16">
             <div className="hidden  lg:flex font-body4 lg:items-center gap-7">
@@ -36,7 +36,7 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium bg-red-500 rounded-full py-1.5 "
+                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
               >
                 <img
                   width="20"
@@ -49,7 +49,7 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium bg-red-500 rounded-full py-1.5 "
+                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
               >
                 <img
                   width="20"
@@ -62,7 +62,7 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium bg-red-500 rounded-full py-1.5 "
+                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
               >
                 <img
                   width="20"
@@ -75,7 +75,7 @@ export default function Navbar() {
               <Link
                 href="#"
                 title=""
-                className="text-sm flex gap-2 text-white px-4 font-medium bg-red-500 rounded-full py-1.5 "
+                className="text-sm flex gap-2 text-white px-4 font-medium border border-red-300 rounded-full py-1.5 "
               >
                 <img
                   width="20"
