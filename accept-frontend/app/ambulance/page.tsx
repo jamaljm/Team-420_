@@ -18,12 +18,12 @@ const playBeep = () => {
   beep.play();
 };
 
-const base_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const base_url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export default function Component() {
   const [session, setSession] = useState(null);
   const [markerData, setMarkerData] = useState<any>();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
   const fetchPost = async () => {
     supabase
@@ -31,7 +31,7 @@ export default function Component() {
       .on(
         "postgres_changes",
         {
-          event: "*",
+          event: "INSERT",
           schema: "public",
           table: "main_table",
         },
@@ -55,37 +55,33 @@ export default function Component() {
   console.log(markerData);
 
   const handleAccept = async (id: number) => {
-    try {
-      // Assuming you have the driver's information available
-      const driverName = "John Doe";
-      const driverPhone = "123-456-7890";
-      const driverLocation = {
-        latitude: 7.8564,
-        longitude: 76.8546,
-        place: "kochi",
-      };
+    // Assuming you have the driver's information available
+    const driverName = "John Doe";
+    const driverPhone = 2342323434;
+    const driverLocation = {
+      latitude: 7.8564,
+      longitude: 76.8546,
+      place: "kochi",
+    };
 
-      // Update the table data
-      const { data, error } = await supabase
-        .from("main_table")
-        .update({
-          driver_name: driverName,
-          driver_phone: driverPhone,
-          driver_location: driverLocation,
-        })
-        .eq("id", id);
+    // Update the table data
+    const { data, error } = await supabase
+      .from("main_table")
+      .update({
+        driver_name: driverName,
+        driver_phone: driverPhone,
+        driver_location: driverLocation,
+      })
+      .eq("id", id);
 
-      if (error) {
-        throw error;
-      }
-
-      const response = await axios.post( base_url, {
-        message: "Ambulance is on the way",
-      });
-      console.log("Data updated successfully:", data);
-    } catch (error) {
-      console.error("Error updating data:");
+    if (error) {
+      throw error;
     }
+
+    // const response = await axios.post(base_url, {
+    //   message: "Ambulance is on the way",
+    // });
+    console.log("Data updated successfully:", data);
   };
 
   return (
@@ -123,15 +119,15 @@ export default function Component() {
                   Service Request
                 </h2>
                 <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-                  Patient: {markerData.user_name}
+                  Patient: {markerData?.user_name}
                 </p>
               </div>
               <div className="space-y-1 text-right ml-auto md:ml-0">
                 <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-                  Number: {markerData.user_phone}
+                  Number: {markerData?.user_phone}
                 </p>
                 <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-                  Location: {markerData.user_lat}, {markerData.user_lng}
+                  Location: {markerData?.user_lat}, {markerData?.user_lng}
                 </p>
               </div>
             </CardHeader>
@@ -144,7 +140,7 @@ export default function Component() {
               </Button>
               <Button
                 className="flex-1"
-                onClick={() => handleAccept(markerData[0].id)}
+                onClick={() => handleAccept(markerData?.id || 2)}
               >
                 Accept
               </Button>

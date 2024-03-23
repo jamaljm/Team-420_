@@ -57,7 +57,7 @@ export default function Component() {
     try {
       // Assuming you have the driver's information available
       const driverName = "54";
-      const driverPhone = "123-456-7890";
+      const driverPhone = 2342323434;
       const driverLocation = {
         latitude: 7.8564,
         longitude: 76.8546,
@@ -143,7 +143,7 @@ export default function Component() {
               </Button>
               <Button
                 className="flex-1"
-                onClick={() => handleAccept(markerData[0].id)}
+                onClick={() => handleAccept(markerData.id)}
               >
                 Accept
               </Button>
