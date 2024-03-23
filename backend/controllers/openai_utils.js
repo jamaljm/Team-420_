@@ -42,18 +42,18 @@ const process_flags = async (desc) => {
             {
                 role: "user",
                 content:`
-                REPLY ONLY IN JSON FORMAT GIVEN IN THE EXAMPLE
+                REPLY ONLY IN JSON FORMAT ONLY
                 ${desc}
-  based on the given data analyse the data and plz make a new json like the eg whether the given situvation needs a police,fireforce or ambulance.
-  if it belongs to she-help or women safety the return accordingly. the result  should be in a json format.
+  based on the given data analyse the data and return json like the eg whether the given situation needs a police,fireforce or ambulance.
+  if it belongs to she_help or women safety the return accordingly. the result  should be in a json format.
     
                 eg: {
                     "police": true,
                     "fireforce": false,
                     "ambulance": false,
-                    "she-help": false
+                    "she_help": false
                 }   
-                return this type of json only  `,
+                return json only  `,
             },
         ],
         temperature: 0.1,

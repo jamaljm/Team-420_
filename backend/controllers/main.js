@@ -51,13 +51,42 @@ const mainflow = async (req, res) => {
                 .order('created_at', { ascending: false })
                 .limit(1);
 
+                const {data:user1, error1} = await supabase
+                .from('users')
+                .select('*')
+                .eq('user_phone', incomingMessage.from.phone);
 
-                const message = {
-                    body: `hey ${incomingMessage.from.name} emergency request has been successfully submitted. Our team is on the way to your location.`,
-                    preview_url: false,
-                };
+                if(user1[0].language==="malayalam")
+                {
+                    console.log("malayalam");
+                    const message = {
+                        body: `ഹലോ ${incomingMessage.from.name}, നിങ്ങളുടെ സാഹചര്യം ശ്രദ്ധിക്കപ്പെട്ടിരിക്കുന്നു`,
+                        preview_url: false,
+                    };
 
-                await wa.messages.text(message, incomingMessage.from.phone);
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user1[0].language==="hindi")
+                {
+                    console.log("hindi");
+                    const message = {
+                        body: `नमस्ते ${incomingMessage.from.name}, आपका आपातकालीन अनुरोध सफलतापूर्वक सबमिट कर दिया गया है। हमारी टीम आपके स्थान पर पहुंच रही है।`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user1[0].language==="english")
+                {
+                    const message = {
+                        body: `hey ${incomingMessage.from.name}, your emergency request has been successfully submitted. Our team is on the way to your location.`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+
+                }
+
 
                 return "location";
             }
@@ -72,21 +101,45 @@ const mainflow = async (req, res) => {
                 const {data:user, error:err} = await supabase
                 .from('users')
                 .update({ "language": audioinfo.language })
-                .eq('user_phone', incomingMessage.from.phone);
+                .eq('user_phone', incomingMessage.from.phone)
+                .select('*');
 
                 const voice_text=audioinfo.text;
 
-                const description=await process_text(incomingMessage.text.body);
+                const proccesstext=JSON.parse(await process_text(voice_text));
 
+                if(user[0].language==="malayalam")
+                {
+                    console.log("malayalam");
                     const message = {
-                        body: `hey ${incomingMessage.from.name}, your sitvation is noted.`,
+                        body: `ഹലോ ${incomingMessage.from.name}, നിങ്ങളുടെ സാഹചര്യം ശ്രദ്ധിക്കപ്പെട്ടിരിക്കുന്നു`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user[0].language==="hindi")
+                {
+                    console.log("hindi");
+                    const message = {
+                        body: `नमस्ते ${incomingMessage.from.name}, आपकी स्थिति नोट कर ली गई है.`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user[0].language==="english")
+                {
+                    const message = {
+                        body: `hey ${incomingMessage.from.name}, your situation is noted.`,
                         preview_url: false,
                     };
 
                     await wa.messages.text(message, incomingMessage.from.phone);
 
+                }
 
-                    const getflags=await process_flags(description);
+                    const getflags=await process_flags(proccesstext.description);
 
                     const {data:user1, error} = await supabase
                     .from('main_table')
@@ -94,8 +147,8 @@ const mainflow = async (req, res) => {
                         {
                             "user_name": incomingMessage.from.name,
                             "user_phone": incomingMessage.from.phone,
-                            "emergency_desc": description,
-                            "flags": getflags,
+                            "emergency_desc": proccesstext,
+                            "flags": JSON.parse(getflags),
                         },
                         ]); 
 
@@ -115,17 +168,59 @@ const mainflow = async (req, res) => {
                 .select('*')
                 .eq('user_phone', incomingMessage.from.phone);
     
+
+                if(user.length===0)
+                {
+    
+                  const {data, error} = await supabase
+                  .from('users')
+                  .insert([
+                      {
+                        user_name: incomingMessage.from.name,
+                        user_phone: incomingMessage.from.phone,
+                        user_flag:true,
+                      },
+                    ]);
+    
+                }    
+
+
                 if(user[0].user_flag===true)
                 {
                     
                     const processtext=JSON.parse(await process_text(incomingMessage.text.body));
+                    if(user[0].language==="malayalam")
+                    {
+                        console.log("malayalam");
+                        const message = {
+                            body: `ഹലോ ${incomingMessage.from.name}, നിങ്ങളുടെ സാഹചര്യം ശ്രദ്ധിക്കപ്പെട്ടിരിക്കുന്നു`,
+                            preview_url: false,
+                        };
+    
+                        await wa.messages.text(message, incomingMessage.from.phone);
+                    }
+                    if(user[0].language==="hindi")
+                    {
+                        console.log("hindi");
+                        const message = {
+                            body: `नमस्ते ${incomingMessage.from.name}, आपकी स्थिति नोट कर ली गई है.`,
+                            preview_url: false,
+                        };
+    
+                        await wa.messages.text(message, incomingMessage.from.phone);
+                    }
+                    if(user[0].language==="english")
+                    {
+                        const message = {
+                            body: `hey ${incomingMessage.from.name}, your situation is noted.`,
+                            preview_url: false,
+                        };
+    
+                        await wa.messages.text(message, incomingMessage.from.phone);
 
-                    const message = {
-                        body: `hey ${incomingMessage.from.name}, your sitvation is noted.`,
-                        preview_url: false,
-                    };
+                    }
 
-                    await wa.messages.text(message, incomingMessage.from.phone);
+
 
 
                     const getflags=await process_flags(processtext.description);
@@ -155,36 +250,44 @@ const mainflow = async (req, res) => {
 
 
 
-                if(user.length===0)
-                {
-    
-                  const {data, error} = await supabase
-                  .from('users')
-                  .insert([
-                      {
-                        user_name: incomingMessage.from.name,
-                        user_phone: incomingMessage.from.phone,
-                        user_flag:true,
-                      },
-                    ]);
-    
-                }    
 
                 const {data, error} = await supabase
                   .from('users')
                   .update({ "user_flag": true })
                   .eq('user_phone', incomingMessage.from.phone);
-    
-                const message = {
-                    body: `hey ${incomingMessage.from.name} Plz state the emergency situation `,
-                    preview_url: false,
-                };
-
-                await wa.messages.text(message, incomingMessage.from.phone);
-
                 
+                if(user[0].language==="malayalam")
+                {
+                    console.log("malayalam");
+                    const message = {
+                        body: `ഹലോ ${incomingMessage.from.name}, ദയവായി നിങ്ങളുടെ അടിയന്തരാവസ്ഥ അറിയിക്കുക`,
+                        preview_url: false,
+                    };
 
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user[0].language==="hindi")
+                {
+                    console.log("hindi");
+                    const message = {
+                        body: `नमस्ते ${incomingMessage.from.name}, कृपया अपनी आपातकालीन स्थिति बताएं`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+                }
+                if(user[0].language==="english")
+                {
+                    const message = {
+                        body: `hey ${incomingMessage.from.name} Please state your emergency  `,
+                        preview_url: false,
+                    };
+    
+                    await wa.messages.text(message, incomingMessage.from.phone);
+    
+                }
                
+                
                 // await location_request(incomingMessage.from.phone);
 
                 return "text";

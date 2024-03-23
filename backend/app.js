@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import { webhook_post, webhook_get } from "./controllers/webhook.js";
+import { sent_message } from "./controllers/whatsapp_util.js";
 
 dotenv.config();
 
@@ -21,7 +22,7 @@ app.use(
 app.post("/webhook", webhook_post);
 app.get("/webhook", webhook_get);
 
-
+app.post("/sent_message", sent_message);
 
 
 app.get("/", (req, res) => {

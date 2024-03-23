@@ -170,6 +170,23 @@ async function downloadWhatsAppMedia( mediaUrl, waId) {
 }
 
 
+const sent_message=async (req, res) => {
+
+  const msg = req.body.message;
+
+ const message = {
+    body: `${msg}`,
+    preview_url: false,
+  };
+
+  await  wa.messages.text(message, '919778715634');
+
+  return "sent";
+
+};
 
 
-export { location_request, mark_as_seen, remove_msg, getMediaUrl, calculateDistance, downloadWhatsAppMedia};
+
+
+
+export { location_request, mark_as_seen, remove_msg, getMediaUrl, calculateDistance, downloadWhatsAppMedia,sent_message};
