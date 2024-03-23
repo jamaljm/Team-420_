@@ -118,7 +118,7 @@ const mainflow = async (req, res) => {
                 if(user[0].user_flag===true)
                 {
                     
-                    const description=await process_text(incomingMessage.text.body);
+                    const processtext=JSON.parse(await process_text(incomingMessage.text.body));
 
                     const message = {
                         body: `hey ${incomingMessage.from.name}, your sitvation is noted.`,
@@ -128,7 +128,8 @@ const mainflow = async (req, res) => {
                     await wa.messages.text(message, incomingMessage.from.phone);
 
 
-                    const getflags=await process_flags(description);
+                    const getflags=await process_flags(processtext.description);
+                    console.log(getflags);
 
                     const {data:user1, error} = await supabase
                     .from('main_table')
@@ -136,8 +137,8 @@ const mainflow = async (req, res) => {
                         {
                             "user_name": incomingMessage.from.name,
                             "user_phone": incomingMessage.from.phone,
-                            "emergency_desc": description,
-                            "flags": getflags,
+                            "emergency_desc": processtext,
+                            "flags": JSON.parse(getflags),
                         },
                         ]); 
 
@@ -167,8 +168,13 @@ const mainflow = async (req, res) => {
                       },
                     ]);
     
-                }
+                }    
 
+                const {data, error} = await supabase
+                  .from('users')
+                  .update({ "user_flag": true })
+                  .eq('user_phone', incomingMessage.from.phone);
+    
                 const message = {
                     body: `hey ${incomingMessage.from.name} Plz state the emergency situation `,
                     preview_url: false,
@@ -213,7 +219,10 @@ const mainflow = async (req, res) => {
                 const mediaurl=await getMediaUrl(incomingMessage.image.id);
                 console.log(mediaurl.url);
 
-               await downloadWhatsAppMedia(mediaurl.url,'1234');
+               await downloadWhatsAppMedia(mediaurl.url,'jeff');
+
+
+
                 const imageinfo=await fetchCompletion();
 
                 const regex = /{([^}]*)}/;
@@ -231,6 +240,7 @@ const mainflow = async (req, res) => {
                         "user_name": incomingMessage.from.name,
                         "user_phone": incomingMessage.from.phone,
                         "emergency_desc": newjson,
+                        "image_link":"https://wknqtqxfmrqcgvihsulz.supabase.co/storage/v1/object/public/images/jeff.jpeg"
                     },
                     ]); 
 
@@ -246,7 +256,7 @@ const mainflow = async (req, res) => {
 
                     await location_request(incomingMessage.from.phone);
 
-
+                   
                 return "image";
             }
 

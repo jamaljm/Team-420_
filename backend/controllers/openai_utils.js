@@ -77,7 +77,7 @@ const process_flags = async (desc) => {
                 role: "user",
                 content:` ONLY REPLY IN JSON FORMAT
                 ${desc}
-                
+
 from the given description find the approx no of people,type of the accident and a small description to understand the accident.
 return the details in this format. please return a json even if data is wrong only once
 eg: 
@@ -197,11 +197,15 @@ const process_voice = async (incomingMessage,text) => {
 
 
 function encodeImage(imagePath) {
-  const image = fs.readFileSync(imagePath);
-  return Buffer.from(image).toString('base64');
+    if (fs.existsSync(imagePath)) 
+ {
+    const image = fs.readFileSync(imagePath);
+    return Buffer.from(image).toString('base64');
+ 
+}
 }
 
-const imagePath = "1234.jpeg";
+const imagePath = "jeff.jpeg";
 
 // Getting the base64 string
 const base64Image = encodeImage(imagePath);
@@ -247,7 +251,7 @@ async function fetchCompletion() {
 
     return response.data.choices[0].message.content;
   } catch (error) {
-    console.error("Error:", error.response.data);
+    console.error("Error:111111 ", error.response.data);
   }
 }
 

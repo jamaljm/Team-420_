@@ -1,5 +1,6 @@
 import axios from 'axios';
 import fs from 'fs';
+import { supabase } from '../supabaseconf.js';
 
 async function location_request(phonenumber) {
   try {
@@ -142,7 +143,20 @@ async function downloadWhatsAppMedia( mediaUrl, waId) {
             const filePath = `${waId}${fileExtension}`;
 
             // Save the media to the specified file path
-            fs.writeFileSync(filePath, response.data, 'binary');
+           await fs.writeFileSync(filePath, response.data, 'binary');
+
+              // Upload the file to Supabase storage
+              const { data, error } = await supabase
+              .storage
+              .from('images')
+              .upload(filePath, response.data, {
+                  contentType: contentType
+              });
+
+          if (error) {
+              console.error('Error uploading file to Supabase:', error.message);
+              return null;
+          }
 
             return filePath;
         } else {
