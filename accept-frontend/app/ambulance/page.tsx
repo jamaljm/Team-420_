@@ -23,7 +23,7 @@ const base_url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 export default function Component() {
   const [session, setSession] = useState(null);
   const [markerData, setMarkerData] = useState<any>();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   const fetchPost = async () => {
     supabase
