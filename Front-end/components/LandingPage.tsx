@@ -8,8 +8,8 @@ export default function EmergencyReportPage() {
           <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="flex items-center justify-between">
               <div className="shrink-0">
-                <a href="#" title="" className="flex">
-                  <img className="w-auto h-11" src="/logo.png" alt="" />
+                <a href="#" title="" className="flex font-body4 text-3xl font-bold">
+                  Beacon 🚨
                 </a>
               </div>
 
@@ -83,12 +83,12 @@ export default function EmergencyReportPage() {
                 <div className="relative inline-flex items-center justify-center mt-8 sm:mt-12 group">
                   <div className="absolute transition-all duration-200 rounded-full -inset-px bg-gradient-to-r from-red-500 to-blue-500 group-hover:shadow-lg group-hover:shadow-red-500/50"></div>
                   <a
-                    href="/report"
+                    href="/login"
                     title=""
                     className="relative font-body4 font-semibold inline-flex items-center justify-center px-8 py-3 text-base  text-white bg-red-600 border border-transparent rounded-full"
                     role="button"
                   >
-                    Report Now
+                    Admin Dashboard{" "}
                   </a>
                 </div>
               </div>

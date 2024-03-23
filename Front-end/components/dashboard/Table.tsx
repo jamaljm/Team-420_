@@ -35,7 +35,6 @@ export type CallData = {
   driver_location: {
     [key: string]: string;
   };
-  driver_flag: boolean;
   p_vechicle_number: string;
   police_phone: number | null;
   police_location: {
@@ -51,15 +50,19 @@ export type CallData = {
     [key: string]: string;
   };
   she_phone: number | null;
-  she_flag: boolean;
-  fire_flag: boolean;
   emergency_desc: {
     type: string;
     description: string;
     no_of_people: number;
   };
-  police_flag: boolean;
+  flags: {
+    police: boolean;
+    she_help: boolean;
+    ambulance: boolean;
+    fireforce: boolean;
+  };
 };
+
 const containerStyle = {
   height: "400px",
   width: "100%",
@@ -78,7 +81,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from("main_table").select("*");
+      const { data, error } = await supabase
+        .from("main_table")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (error) {
         console.error("Error fetching data:", error);
         return;
@@ -212,11 +218,11 @@ export default function Dashboard() {
                                       Emergency
                                     </p>
                                     <p className="text-xs bg-[#232d479e] px-3 my-2 rounded-xl text-white font-body1 py-3">
-                                      {call.emergency_desc.description}
+                                      {call.emergency_desc?.description}
                                     </p>
                                     <p className="text-xs bg-red-200  px-4 py-1 rounded-2xl w-fit font-body4  font-normal text-black">
                                       No of People involved:{" "}
-                                      {call.emergency_desc.no_of_people}
+                                      {call.emergency_desc?.no_of_people}
                                     </p>
                                   </div>
 
@@ -250,7 +256,7 @@ export default function Dashboard() {
                                       </thead>
 
                                       <tbody className="divide-y divide-red-200">
-                                        {call.police_flag && (
+                                        {call.flags.police && (
                                           <tr>
                                             <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
                                               Police
@@ -274,7 +280,7 @@ export default function Dashboard() {
                                             </td>
                                           </tr>
                                         )}
-                                        {call.fire_flag && (
+                                        {call.flags.fireforce && (
                                           <tr>
                                             <td className="px-6 py-3 font-body1 text-xs  font-normal text-white whitespace-nowrap">
                                               Fire Force
@@ -298,7 +304,7 @@ export default function Dashboard() {
                                             </td>
                                           </tr>
                                         )}
-                                        {call.she_flag && (
+                                        {call.flags.she_help && (
                                           <tr>
                                             <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
                                               She-Police
@@ -322,33 +328,35 @@ export default function Dashboard() {
                                             </td>
                                           </tr>
                                         )}
-                                        <tr>
-                                          <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
-                                            Ambulance
-                                          </td>
-                                          <td
-                                            className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
-                                              call.driver_name
-                                                ? "bg-green-200"
-                                                : "bg-red-200"
-                                            }`}
-                                          >
-                                            {call.driver_name
-                                              ? "Assigned"
-                                              : "Not Assigned"}
-                                          </td>
-                                          <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
-                                            {call.driver_name}
-                                          </td>
-                                          <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
-                                            {call.driver_phone}89988989
-                                          </td>
-                                        </tr>
+                                        {call.flags.ambulance && (
+                                          <tr>
+                                            <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
+                                              Ambulance
+                                            </td>
+                                            <td
+                                              className={`px-2 font-body1  py-3 text-sm font-medium text-gray-700 whitespace-nowrap ${
+                                                call.driver_name
+                                                  ? "bg-green-200"
+                                                  : "bg-red-200"
+                                              }`}
+                                            >
+                                              {call.driver_name
+                                                ? "Assigned"
+                                                : "Not Assigned"}
+                                            </td>
+                                            <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
+                                              {call.driver_name}
+                                            </td>
+                                            <td className="px-6 font-body1 py-3 text-xs  font-normal text-white whitespace-nowrap">
+                                              {call.driver_phone}
+                                            </td>
+                                          </tr>
+                                        )}
                                       </tbody>
                                     </table>
                                   </div>
                                 </div>{" "}
-                                <Button className="bg-green-200 mt-2 mx-4 py-1 w-full text-green-950  font-body4 font-semibold">
+                                <Button className="bg-green-200 mt-4 mx-4 py-0.5 w-[96%] text-green-950  font-body4 font-semibold">
                                   Resolved
                                 </Button>
                               </div>

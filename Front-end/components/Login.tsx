@@ -9,7 +9,7 @@ export default function Login() {
   const router = useRouter();
 
   const handleLoging = async (e: any) => {
-    router.push("/home");
+    router.push("/dashboard");
   };
   return (
     <section className="bg-white">
