@@ -5,7 +5,7 @@ import Dash from "./Dash";
 
 export default function Main() {
   return (
-    <div className="min-h-screen bg-gradient-to-r  from-green-100  to-blue-100">
+    <div className="min-h-screen bg-[#333e51]">
       <Navbar />
       <Top />
       <Dash />

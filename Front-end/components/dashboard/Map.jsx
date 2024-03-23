@@ -1,6 +1,8 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import ReactDOMServer from "react-dom/server";
+import { supabase } from "../../config/supabase/client";
 
 // import './App.css';
 // import MapMarker from './Marker';
@@ -11,8 +13,8 @@ mapboxgl.accessToken =
 function PopupComponent({ data }) {
   return (
     <div className="popup flex-col items-center">
-      <h3 className=" font-sans text-lg ">{data.tittle.toUpperCase()}</h3>
-      <p className="font-sans text-sm">{data.description}</p>
+      {/* <h3 className=" font-sans text-lg ">{data.tittle.toUpperCase()}</h3>
+      <p className="font-sans text-sm">{data.description}</p> */}
     </div>
   );
 }
@@ -22,30 +24,55 @@ function Map() {
   const [Location, setLocation] = useState([]);
   const [corods, setcorods] = useState([]);
 
+  useEffect(() => {
+    const fetchLocation = async () => {
+      const { data, error } = await supabase.from("police").select("*");
+      if (error) console.log("error", error);
+      console.log(data);
+      setmarkerData(data);
+      setLocation(
+        data.filter((person) => person !== "").map((person) => person)
+      );
+    };
+    fetchLocation();
+  }, []);
+  console.log(markerData);
   const fetchPost = async () => {
-     supabase
-       .channel("Message")
-       .on(
-         "postgres_changes",
-         { event: "INSERT", schema: "public", table: "Message" },
-         handleInserts
-       )
-       .subscribe();
-    setmarkerData(newData);
-    setLocation(
-      newData
-        .filter((person) => person.location !== "")
-        .map((person) => person.location)
-    );
+    supabase
+      .channel("police")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "police" },
+        (payload) => {
+          console.log("Change received!", payload);
+        }
+      )
+      .subscribe();
+    // setLocation(
+    //   newData
+    //     .filter((person) => person.location !== "")
+    //     .map((person) => person.location)
+    // );
   };
 
   useEffect(() => {
     fetchPost();
   }, []);
+  let cordinaates = [
+    [76.3289828, 10.0298734],
+    [76.357, 10.1004],
+    [76.3125, 10.0261],
+  ];
 
   useEffect(() => {
-    setcorods(Location.map((item) => [item?.longitude, item?.latitude]));
+    setcorods(
+      cordinaates.map((item) => [
+        item?.station_longitude,
+        item?.station_latitude,
+      ])
+    );
   }, [Location]);
+  console.log(corods);
 
   let longitude, latitude;
   if (navigator.geolocation) {
@@ -74,7 +101,7 @@ function Map() {
         attributionControl: false,
         // style:'mapbox://styles/mapbox/dark-v11',
         center: [position.coords.longitude, position.coords.latitude],
-        zoom: 12,
+        zoom: 8,
       });
 
       map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
@@ -93,9 +120,9 @@ function Map() {
       const markers = markerData.map((obj) => {
         el = document.createElement("div");
         el.className = "marker";
-        if (obj.location?.latitude) {
+        if (obj.station_longitude) {
           return new mapboxgl.Marker(el)
-            .setLngLat([obj.location.longitude, obj.location.latitude])
+            .setLngLat([obj.station_longitude, obj.station_latitude])
             .setPopup(
               new mapboxgl.Popup({ closeOnClick: false }).setHTML(
                 ReactDOMServer.renderToString(
