@@ -63,6 +63,48 @@ const mainflow = async (req, res) => {
             }
 
 
+            if (incomingMessage.audio && incomingMessage.audio.hasOwnProperty("id")) 
+            {
+                console.log("audio message");
+
+                const audioinfo=await manage_audio(incomingMessage);
+
+                const {data:user, error:err} = await supabase
+                .from('users')
+                .update({ "language": audioinfo.language })
+                .eq('user_phone', incomingMessage.from.phone);
+
+                const voice_text=audioinfo.text;
+
+                const description=await process_text(incomingMessage.text.body);
+
+                    const message = {
+                        body: `hey ${incomingMessage.from.name}, your sitvation is noted.`,
+                        preview_url: false,
+                    };
+
+                    await wa.messages.text(message, incomingMessage.from.phone);
+
+
+                    const getflags=await process_flags(description);
+
+                    const {data:user1, error} = await supabase
+                    .from('main_table')
+                    .insert([
+                        {
+                            "user_name": incomingMessage.from.name,
+                            "user_phone": incomingMessage.from.phone,
+                            "emergency_desc": description,
+                            "flags": getflags,
+                        },
+                        ]); 
+
+                        await location_request(incomingMessage.from.phone);
+
+                return "audio";
+            }
+
+
 
             if (incomingMessage.text && incomingMessage.text.hasOwnProperty("body")) {
                 
@@ -100,6 +142,11 @@ const mainflow = async (req, res) => {
                         ]); 
 
                         await location_request(incomingMessage.from.phone);
+
+                    const {data:user2, error1} = await supabase
+                    .from('users')
+                    .update({ "user_flag": false })
+                    .eq('user_phone', incomingMessage.from.phone);    
 
 
                         return "text";
