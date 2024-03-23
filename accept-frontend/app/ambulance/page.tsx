@@ -78,9 +78,9 @@ export default function Component() {
       throw error;
     }
 
-    // const response = await axios.post(base_url, {
-    //   message: "Ambulance is on the way",
-    // });
+    const response = await axios.post(base_url, {
+      message: "Ambulance is on the way",
+    });
     console.log("Data updated successfully:", data);
   };
 
