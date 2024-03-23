@@ -17,6 +17,7 @@ const playBeep = () => {
   const beep = new Audio("beep.mp3");
   beep.play();
 };
+const base_url = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export default function Component() {
   const [session, setSession] = useState(null);
@@ -77,8 +78,8 @@ export default function Component() {
         throw error;
       }
 
-      const response = await axios.post("your_api_endpoint", {
-        message: "Ambulance is on the way",
+      const response = await axios.post(base_url, {
+        message: "She police is on the way",
       });
       console.log("Data updated successfully:", data);
     } catch (error) {

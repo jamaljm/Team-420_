@@ -18,6 +18,8 @@ const playBeep = () => {
   beep.play();
 };
 
+const base_url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
 export default function Component() {
   const [session, setSession] = useState(null);
   const [markerData, setMarkerData] = useState<any>();
@@ -77,7 +79,7 @@ export default function Component() {
         throw error;
       }
 
-      const response = await axios.post("your_api_endpoint", {
+      const response = await axios.post( base_url, {
         message: "Ambulance is on the way",
       });
       console.log("Data updated successfully:", data);
