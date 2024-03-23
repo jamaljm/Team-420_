@@ -1,4 +1,5 @@
 import axios from 'axios';
+import fs from 'fs';
 
 async function location_request(phonenumber) {
   try {
@@ -19,7 +20,7 @@ async function location_request(phonenumber) {
     }, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.WA_ACCESS_TOKEN}`
+        'Authorization': `Bearer ${process.env.ACCESSTOKEN}`
       }
     });
     
@@ -74,5 +75,87 @@ const remove_msg = async (incomingMessage, res) => {
 };
   
 
+const getMediaUrl = async (media_id)=>{
+    const headers = {
+        'Authorization': `Bearer ${process.env.ACCESSTOKEN}`
+    };
+    console.log("media_id", media_id);
+    console.log("headers", headers);
+    try {
+        const response = await axios.get(
+            `https://graph.facebook.com/v18.0/${media_id}/`, { headers });
 
-export { location_request, mark_as_seen, remove_msg};
+        if (response.status === 200) {
+            return response.data;
+        } else {
+            // Handle non-200 status codes if needed
+            console.error(`Failed to get media URL. Status Code: ${response.status}`);
+            return null;
+        }
+    } catch (error) {
+        // Handle request errors
+        console.error('Error fetching media URL:', error.message);
+        return null;
+    }
+}; 
+
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const earthRadiusKm = 6371; // Radius of the Earth in kilometers
+    const dLat = degreesToRadians(lat2 - lat1);
+    const dLon = degreesToRadians(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = earthRadiusKm * c; // Distance in kilometers
+
+    return distance;
+}
+
+function degreesToRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+
+
+async function downloadWhatsAppMedia( mediaUrl, waId) {
+    const headers = {
+        'Authorization': `Bearer ${process.env.ACCESSTOKEN}`
+    };
+
+    try {
+        // Send a GET request to the media URL
+        const response = await axios.get(mediaUrl, { headers, responseType: 'arraybuffer' });
+
+        if (response.status === 200) {
+            // Extract the MIME type from the response headers
+            const contentType = response.headers['content-type'];
+
+            // Determine the file extension based on the MIME type
+            const fileExtension = contentType ? '.' + contentType.split('/')[1] : '';
+
+            // Build the file path including the determined file extension
+            const filePath = `${waId}${fileExtension}`;
+
+            // Save the media to the specified file path
+            fs.writeFileSync(filePath, response.data, 'binary');
+
+            return filePath;
+        } else {
+            console.error(`Failed to download media. Status code: ${response.status}`);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error downloading media:', error.message);
+        return null;
+    }
+}
+
+
+
+
+export { location_request, mark_as_seen, remove_msg, getMediaUrl, calculateDistance, downloadWhatsAppMedia};

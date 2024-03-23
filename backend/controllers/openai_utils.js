@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { whatsapp1, supabase, wa,openai } from "../supabaseconf.js";
 import dotenv from "dotenv";
+import fs from 'fs';
 
 
 dotenv.config();
@@ -31,28 +32,73 @@ const translate_to = async (language,msg) => {
 };
 
 
-const process_text = async (language,msg) => {
+
+
+const process_flags = async (desc) => {
 
     const response = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
             {
                 role: "user",
-                content: `translate the below text to ${language}.
-                                              ${msg}
-                                                        `,
+                content:`
+                REPLY ONLY IN JSON FORMAT GIVEN IN THE EXAMPLE
+                ${desc}
+  based on the given data analyse the data and plz make a new json like the eg whether the given situvation needs a police,fireforce or ambulance.
+  if it belongs to she-help or women safety the return accordingly. the result  should be in a json format.
+    
+                eg: {
+                    "police": true,
+                    "fireforce": false,
+                    "ambulance": false,
+                    "she-help": false
+                }   
+                return this type of json only  `,
             },
         ],
         temperature: 0.1,
-        max_tokens: 256,
+        max_tokens: 2000,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
     });
-
+  
     console.log(response.choices[0].message.content);
     return response.choices[0].message.content;
-};
+  };
+  
+
+  const process_text = async (desc) => {
+
+    const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+            {
+                role: "user",
+                content:` ONLY REPLY IN JSON FORMAT
+                ${desc}
+                
+from the given description find the approx no of people,type of the accident and a small description to understand the accident.
+return the details in this format. please return a json even if data is wrong only once
+eg: 
+{
+    "no_of_people": 2,
+    "type": "car accident",
+    "description":"There is a huge car accident occured and 3 people are injured.2 May have seen lost some blood and 1 person is in critical condition."
+}` ,
+            },
+        ],
+        temperature: 0.1,
+        max_tokens: 2000,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+    });
+  
+    console.log(response.choices[0].message.content);
+    return response.choices[0].message.content;
+  };
+  
 
 
 const process_voice = async (incomingMessage,text) => {
@@ -106,33 +152,104 @@ const process_voice = async (incomingMessage,text) => {
 };
 
 
-const processimage = async (imageUrl,language) => {
-    const response = await openai.chat.completions.create({
-        model: "gpt-4-vision-preview",
-        messages: [
-            {
-                role: "user",
-                content: [
-                    {
-                        type: "text",
-                        text: `What’s the disease in the leaf?,give me advise to prevent this in three points in ${language}`,
-                    },
-                    {
-                        type: "image_url",
-                        image_url: {
-                            url: imageUrl,
-                            "detail": "low",
-                        },
-                    },
-                ],
-            },
-        ],
-        max_tokens: 1000,
-    });
-    console.log(response.choices[0].message.content);
-    return response.choices[0].message.content;
+// const processimage = async (imageUrl,language) => {
+//     const response = await openai.chat.completions.create({
+//         model: "gpt-4-vision-preview",
+//         messages: [
+//             {
+//                 role: "user",
+//                 content: [
+//                     {
+//                         type: "text",
+//                         text: `Analyze the image and give the details about the accident or disaster in the image.
+// find out the no of injured person,type of the accident , severity of the accident in the scale of 1-10 and a small description to understand the accident for police,
+// fireforce and hospitals.
+
+// return the details in the format of JSON.
+
+// eg: {
+
+//     "no_of_injured": 2,
+//     "type": "car accident",
+//     "severity": 7,
+//     "description":"There is a huge car accident occured and 3 people are injured.2 May have seen lost some blood and 1 person is in critical condition."
+    
+// }`,
+//                     },
+//                     {
+//                         type: "image_url",
+//                         image_url: {
+//                             url: imageUrl,
+//                             "detail": "low",
+//                         },
+//                     },
+//                 ],
+//             },
+//         ],
+//         max_tokens: 1000,
+//     });
+//     console.log(response.choices[0].message.content);
+//     return response.choices[0].message.content;
+// };
+
+
+// Function to encode the image
+
+
+function encodeImage(imagePath) {
+  const image = fs.readFileSync(imagePath);
+  return Buffer.from(image).toString('base64');
+}
+
+const imagePath = "1234.jpeg";
+
+// Getting the base64 string
+const base64Image = encodeImage(imagePath);
+
+const headers = {
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
 };
 
+const payload = {
+  "model": "gpt-4-vision-preview",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          text: `from the given image find the approx no of people,type of the accident and a small description to understand the accident.
+         return the details in this format. please return a json even if data is wrong only once
+          eg: 
+           {
+              "no_of_people": 2,
+              "type": "car accident",
+              "description":"There is a huge car accident occured and 3 people are injured.2 May have seen lost some blood and 1 person is in critical condition."
+          }`,
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": `data:image/jpeg;base64,${base64Image}`
+          }
+        }
+      ]
+    }
+  ],
+  "max_tokens": 3000
+};
+
+async function fetchCompletion() {
+  try {
+    const response = await axios.post("https://api.openai.com/v1/chat/completions", payload, { headers });
+    //console.log(response.data.choices[0].message.content);
+
+    return response.data.choices[0].message.content;
+  } catch (error) {
+    console.error("Error:", error.response.data);
+  }
+}
 
 
-export {translate_to,process_voice,processimage,process_text};
+export {translate_to,process_voice,process_text,fetchCompletion,process_flags};

@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "multiformats": "^9.9.0",
     "nodemon": "^3.0.3",
+    "openai": "^4.29.2",
     "whatsapp": "^0.0.5-Alpha",
     "whatsappcloudapi_wrapper": "^1.0.13"
   }
