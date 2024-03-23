@@ -96,16 +96,14 @@ export default function Dashboard() {
   }, []);
 
   const filteredCalls: CallData[] = (values || [])
-    .filter((call: any) => call.status === ("ordered" as StatusesKeys))
+    .filter((call: any) => call.status === ("get" as StatusesKeys))
     .map((call: any) => ({ ...call, key: call.unique_id }));
 
   const filteredCalls2: CallData[] = (values || [])
     .filter((call: any) => call.status === ("accepted" as StatusesKeys))
     .map((call: any) => ({ ...call, key: call.unique_id }));
 
-  const filteredCalls3: CallData[] = (values || [])
-    .filter((call: any) => call.status === ("delivered" as StatusesKeys))
-    .map((call: any) => ({ ...call, key: call.unique_id }));
+
 
   const handleAccept = (unique_id: string) => {};
 
@@ -330,7 +328,7 @@ export default function Dashboard() {
                                         )}
                                         {call.flags.ambulance && (
                                           <tr>
-                                            <td className="px-6 py-3 font-body1 text-xs  font-bold text-white whitespace-nowrap">
+                                            <td className="px-6 py-3 font-body1 text-xs  font-normal text-white whitespace-nowrap">
                                               Ambulance
                                             </td>
                                             <td
