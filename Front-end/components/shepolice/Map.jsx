@@ -13,13 +13,37 @@ mapboxgl.accessToken =
 function PopupComponent({ data }) {
   return (
     <div className="popup flex-col items-center">
-      <h3 className=" font-body1 text-md ">{data.emergency_desc?.type}</h3>
-      <p className=" text-xs font-body4">Id: {data.id}</p>
-      <p className=" text-xs font-body4">{data.user_name}</p>
-      <p className=" text-xs font-body4">{data.user_phone}</p>
+      <p className=" text-xs font-body4">{data.name}</p>
+      <p className=" text-xs font-body4">{data.phoneNumber}</p>
     </div>
   );
 }
+const policeData = [
+  {
+    name: "Thiruvananthapuram Police Station A",
+    phoneNumber: "1234567890",
+    latitude: 8.5074,
+    longitude: 76.9587, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+  },
+  {
+    name: "Thiruvananthapuram Police Station B",
+    phoneNumber: "2345678901",
+    latitude: 8.4786,
+    longitude: 76.9524, // Approximate coordinates within 10 km radius of Thiruvananthapuram
+  },
+  {
+    name: "Kollam Police Station A",
+    phoneNumber: "3456789012",
+    latitude: 8.8839,
+    longitude: 76.6147, // Coordinates of a police station in Kollam district
+  },
+  {
+    name: "Kollam Police Station B",
+    phoneNumber: "4567890123",
+    latitude: 8.8873,
+    longitude: 76.6006, // Coordinates of a police station in Kollam district
+  },
+];
 
 function Map() {
   const [markerData, setmarkerData] = useState([{}]);
@@ -29,9 +53,7 @@ function Map() {
 
   useEffect(() => {
     const fetchLocation = async () => {
-      const { data, error } = await supabase
-        .from("main_table")
-        .select("*");
+      const { data, error } = await supabase.from("main_table").select("*");
       if (error) console.log("error", error);
       console.log(data);
       setmarkerData(data);
@@ -45,10 +67,9 @@ function Map() {
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "*",
           schema: "public",
-          table:
-            "main_table",
+          table: "main_table",
         },
         (payload) => {
           console.log("Change received!", payload);
@@ -121,15 +142,15 @@ function Map() {
       );
 
       let el = document.createElement("div");
-      const markers = markerData.map((obj) => {
+      const markers = policeData.map((obj) => {
         el = document.createElement("div");
-        el.className = "marker";
+        el.className = "marker1";
         console.log(obj);
-        if (obj.user_lat) {
-          console.log(obj.user_lat, obj.user_lon);
+        if (typeof(obj.latitude) === "number") {
+          console.log(typeof obj.latitude, obj.longitude);
 
           return new mapboxgl.Marker(el)
-            .setLngLat([obj.user_lon, obj.user_lat])
+            .setLngLat([obj.longitude, obj.latitude])
             .setPopup(
               new mapboxgl.Popup({ closeOnClick: false }).setHTML(
                 ReactDOMServer.renderToString(

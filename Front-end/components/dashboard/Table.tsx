@@ -95,6 +95,26 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    supabase
+      .channel("main_table")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "main_table",
+        },
+        (payload) => {
+          console.log("Change received!", payload);
+          if (payload) {
+                    setValues((prev) => [payload.new as CallData, ...prev]);
+          }
+        }
+      )
+      .subscribe();
+  }, []);
+
   const filteredCalls: CallData[] = (values || [])
     .filter((call: any) => call.status === ("get" as StatusesKeys))
     .map((call: any) => ({ ...call, key: call.unique_id }));
